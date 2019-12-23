@@ -1,0 +1,462 @@
+// swift-interface-format-version: 1.0
+// swift-compiler-version: Apple Swift version 5.1.2 effective-4.2 (swiftlang-1100.0.278 clang-1100.0.33.9)
+// swift-module-flags: -target arm64-apple-ios12.2 -enable-objc-interop -enable-library-evolution -swift-version 4.2 -enforce-exclusivity=checked -Onone -module-name CubiCapture
+import ARKit
+import AVFoundation
+import CoreMotion
+@_exported import CubiCapture
+import Foundation
+import Minizip
+import SceneKit
+import Swift
+import UIKit
+@objc public class ImagesToVideoUtils : ObjectiveC.NSObject {
+  public class func videoSettings(codec: Swift.String, width: Swift.Int, height: Swift.Int) -> [Swift.String : Any]
+  public init(videoSettings: [Swift.String : Any])
+  @objc override dynamic public init()
+  @objc deinit
+}
+@available(*, deprecated, message: "Use the `SwiftyJSONError.errorDomain` instead")
+public var ErrorDomain: Swift.String
+@available(*, deprecated, message: "Use the `SwiftyJSONError.unsupportedType` instead")
+public var ErrorUnsupportedType: Swift.Int
+@available(*, deprecated, message: "Use the `SwiftyJSONError.indexOutOfBounds` instead")
+public var ErrorIndexOutOfBounds: Swift.Int
+@available(*, deprecated, message: "Use the `SwiftyJSONError.wrongType` instead")
+public var ErrorWrongType: Swift.Int
+@available(*, deprecated, message: "Use the `SwiftyJSONError.notExist` instead")
+public var ErrorNotExist: Swift.Int
+@available(*, deprecated, message: "Use the `SwiftyJSONError.invalidJSON` instead")
+public var ErrorInvalidJSON: Swift.Int
+public enum SwiftyJSONError : Swift.Int, Swift.Error {
+  case unsupportedType
+  case indexOutOfBounds
+  case elementTooDeep
+  case wrongType
+  case notExist
+  case invalidJSON
+  public typealias RawValue = Swift.Int
+  public init?(rawValue: Swift.Int)
+  public var rawValue: Swift.Int {
+    get
+  }
+}
+extension SwiftyJSONError : Foundation.CustomNSError {
+  public static var errorDomain: Swift.String {
+    get
+  }
+  public var errorCode: Swift.Int {
+    get
+  }
+  public var errorUserInfo: [Swift.String : Any] {
+    get
+  }
+}
+public enum Type : Swift.Int {
+  case number
+  case string
+  case bool
+  case array
+  case dictionary
+  case null
+  case unknown
+  public typealias RawValue = Swift.Int
+  public init?(rawValue: Swift.Int)
+  public var rawValue: Swift.Int {
+    get
+  }
+}
+public struct JSON {
+  public init(data: Foundation.Data, options opt: Foundation.JSONSerialization.ReadingOptions = []) throws
+  public init(_ object: Any)
+  public init(parseJSON jsonString: Swift.String)
+  @available(*, deprecated, message: "Use instead `init(parseJSON: )`")
+  public static func parse(_ json: Swift.String) -> CubiCapture.JSON
+  public mutating func merge(with other: CubiCapture.JSON) throws
+  public func merged(with other: CubiCapture.JSON) throws -> CubiCapture.JSON
+  public var type: CubiCapture.Type {
+    get
+    }
+  public var error: CubiCapture.SwiftyJSONError? {
+    get
+    }
+  public var object: Any {
+    get
+    set(newValue)
+  }
+  @available(*, unavailable, renamed: "null")
+  public static var nullJSON: CubiCapture.JSON {
+    get
+  }
+  public static var null: CubiCapture.JSON {
+    get
+  }
+}
+public enum Index<T> : Swift.Comparable {
+  case array(Swift.Int)
+  case dictionary(Swift.DictionaryIndex<Swift.String, T>)
+  case null
+  public static func == (lhs: CubiCapture.Index<T>, rhs: CubiCapture.Index<T>) -> Swift.Bool
+  public static func < (lhs: CubiCapture.Index<T>, rhs: CubiCapture.Index<T>) -> Swift.Bool
+}
+public typealias JSONIndex = CubiCapture.Index<CubiCapture.JSON>
+public typealias JSONRawIndex = CubiCapture.Index<Any>
+extension JSON : Swift.Collection {
+  public typealias Index = CubiCapture.JSONRawIndex
+  public var startIndex: CubiCapture.JSON.Index {
+    get
+  }
+  public var endIndex: CubiCapture.JSON.Index {
+    get
+  }
+  public func index(after i: CubiCapture.JSON.Index) -> CubiCapture.JSON.Index
+  public subscript(position: CubiCapture.JSON.Index) -> (Swift.String, CubiCapture.JSON) {
+    get
+  }
+  public typealias Element = (Swift.String, CubiCapture.JSON)
+  public typealias Iterator = Swift.IndexingIterator<CubiCapture.JSON>
+  public typealias SubSequence = Swift.Slice<CubiCapture.JSON>
+  public typealias Indices = Swift.DefaultIndices<CubiCapture.JSON>
+}
+public enum JSONKey {
+  case index(Swift.Int)
+  case key(Swift.String)
+}
+public protocol JSONSubscriptType {
+  var jsonKey: CubiCapture.JSONKey { get }
+}
+extension Int : CubiCapture.JSONSubscriptType {
+  public var jsonKey: CubiCapture.JSONKey {
+    get
+  }
+}
+extension String : CubiCapture.JSONSubscriptType {
+  public var jsonKey: CubiCapture.JSONKey {
+    get
+  }
+}
+extension JSON {
+  public subscript(path: [CubiCapture.JSONSubscriptType]) -> CubiCapture.JSON {
+    get
+    set(newValue)
+  }
+  public subscript(path: CubiCapture.JSONSubscriptType...) -> CubiCapture.JSON {
+    get
+    set(newValue)
+  }
+}
+extension JSON : Swift.ExpressibleByStringLiteral {
+  public init(stringLiteral value: Swift.StringLiteralType)
+  public init(extendedGraphemeClusterLiteral value: Swift.StringLiteralType)
+  public init(unicodeScalarLiteral value: Swift.StringLiteralType)
+  public typealias StringLiteralType = Swift.StringLiteralType
+  public typealias ExtendedGraphemeClusterLiteralType = Swift.StringLiteralType
+  public typealias UnicodeScalarLiteralType = Swift.StringLiteralType
+}
+extension JSON : Swift.ExpressibleByIntegerLiteral {
+  public init(integerLiteral value: Swift.IntegerLiteralType)
+  public typealias IntegerLiteralType = Swift.IntegerLiteralType
+}
+extension JSON : Swift.ExpressibleByBooleanLiteral {
+  public init(booleanLiteral value: Swift.BooleanLiteralType)
+  public typealias BooleanLiteralType = Swift.BooleanLiteralType
+}
+extension JSON : Swift.ExpressibleByFloatLiteral {
+  public init(floatLiteral value: Swift.FloatLiteralType)
+  public typealias FloatLiteralType = Swift.FloatLiteralType
+}
+extension JSON : Swift.ExpressibleByDictionaryLiteral {
+  public init(dictionaryLiteral elements: (Swift.String, Any)...)
+  public typealias Key = Swift.String
+  public typealias Value = Any
+}
+extension JSON : Swift.ExpressibleByArrayLiteral {
+  public init(arrayLiteral elements: Any...)
+  public typealias ArrayLiteralElement = Any
+}
+extension JSON : Swift.ExpressibleByNilLiteral {
+  @available(*, deprecated, message: "use JSON.null instead. Will be removed in future versions")
+  public init(nilLiteral: ())
+}
+extension JSON : Swift.RawRepresentable {
+  public init?(rawValue: Any)
+  public var rawValue: Any {
+    get
+  }
+  public func rawData(options opt: Foundation.JSONSerialization.WritingOptions = JSONSerialization.WritingOptions(rawValue: 0)) throws -> Foundation.Data
+  public func rawString(_ encoding: Swift.String.Encoding = .utf8, options opt: Foundation.JSONSerialization.WritingOptions = .prettyPrinted) -> Swift.String?
+  public func rawString(_ options: [CubiCapture.writingOptionsKeys : Any]) -> Swift.String?
+  public typealias RawValue = Any
+}
+extension JSON : Swift.CustomStringConvertible, Swift.CustomDebugStringConvertible {
+  public var description: Swift.String {
+    get
+  }
+  public var debugDescription: Swift.String {
+    get
+  }
+}
+extension JSON {
+  public var array: [CubiCapture.JSON]? {
+    get
+  }
+  public var arrayValue: [CubiCapture.JSON] {
+    get
+  }
+  public var arrayObject: [Any]? {
+    get
+    set(newValue)
+  }
+}
+extension JSON {
+  public var dictionary: [Swift.String : CubiCapture.JSON]? {
+    get
+  }
+  public var dictionaryValue: [Swift.String : CubiCapture.JSON] {
+    get
+  }
+  public var dictionaryObject: [Swift.String : Any]? {
+    get
+    set(newValue)
+  }
+}
+extension JSON {
+  public var bool: Swift.Bool? {
+    get
+    set(newValue)
+  }
+  public var boolValue: Swift.Bool {
+    get
+    set(newValue)
+  }
+}
+extension JSON {
+  public var string: Swift.String? {
+    get
+    set(newValue)
+  }
+  public var stringValue: Swift.String {
+    get
+    set(newValue)
+  }
+}
+extension JSON {
+  public var number: Foundation.NSNumber? {
+    get
+    set(newValue)
+  }
+  public var numberValue: Foundation.NSNumber {
+    get
+    set(newValue)
+  }
+}
+extension JSON {
+  public var null: Foundation.NSNull? {
+    get
+    set(newValue)
+  }
+  public func exists() -> Swift.Bool
+}
+extension JSON {
+  public var url: Foundation.URL? {
+    get
+    set(newValue)
+  }
+}
+extension JSON {
+  public var double: Swift.Double? {
+    get
+    set(newValue)
+  }
+  public var doubleValue: Swift.Double {
+    get
+    set(newValue)
+  }
+  public var float: Swift.Float? {
+    get
+    set(newValue)
+  }
+  public var floatValue: Swift.Float {
+    get
+    set(newValue)
+  }
+  public var int: Swift.Int? {
+    get
+    set(newValue)
+  }
+  public var intValue: Swift.Int {
+    get
+    set(newValue)
+  }
+  public var uInt: Swift.UInt? {
+    get
+    set(newValue)
+  }
+  public var uIntValue: Swift.UInt {
+    get
+    set(newValue)
+  }
+  public var int8: Swift.Int8? {
+    get
+    set(newValue)
+  }
+  public var int8Value: Swift.Int8 {
+    get
+    set(newValue)
+  }
+  public var uInt8: Swift.UInt8? {
+    get
+    set(newValue)
+  }
+  public var uInt8Value: Swift.UInt8 {
+    get
+    set(newValue)
+  }
+  public var int16: Swift.Int16? {
+    get
+    set(newValue)
+  }
+  public var int16Value: Swift.Int16 {
+    get
+    set(newValue)
+  }
+  public var uInt16: Swift.UInt16? {
+    get
+    set(newValue)
+  }
+  public var uInt16Value: Swift.UInt16 {
+    get
+    set(newValue)
+  }
+  public var int32: Swift.Int32? {
+    get
+    set(newValue)
+  }
+  public var int32Value: Swift.Int32 {
+    get
+    set(newValue)
+  }
+  public var uInt32: Swift.UInt32? {
+    get
+    set(newValue)
+  }
+  public var uInt32Value: Swift.UInt32 {
+    get
+    set(newValue)
+  }
+  public var int64: Swift.Int64? {
+    get
+    set(newValue)
+  }
+  public var int64Value: Swift.Int64 {
+    get
+    set(newValue)
+  }
+  public var uInt64: Swift.UInt64? {
+    get
+    set(newValue)
+  }
+  public var uInt64Value: Swift.UInt64 {
+    get
+    set(newValue)
+  }
+}
+extension JSON : Swift.Comparable {
+}
+public func == (lhs: CubiCapture.JSON, rhs: CubiCapture.JSON) -> Swift.Bool
+public func <= (lhs: CubiCapture.JSON, rhs: CubiCapture.JSON) -> Swift.Bool
+public func >= (lhs: CubiCapture.JSON, rhs: CubiCapture.JSON) -> Swift.Bool
+public func > (lhs: CubiCapture.JSON, rhs: CubiCapture.JSON) -> Swift.Bool
+public func < (lhs: CubiCapture.JSON, rhs: CubiCapture.JSON) -> Swift.Bool
+public enum writingOptionsKeys {
+  case jsonSerialization
+  case castNilToNSNull
+  case maxObjextDepth
+  case encoding
+  public static func == (a: CubiCapture.writingOptionsKeys, b: CubiCapture.writingOptionsKeys) -> Swift.Bool
+  public var hashValue: Swift.Int {
+    get
+  }
+  public func hash(into hasher: inout Swift.Hasher)
+}
+extension UIDevice {
+  public static var modelName: Swift.String
+}
+extension Zip {
+  public class func quickUnzipFile(_ path: Foundation.URL) throws -> Foundation.URL
+  public class func quickUnzipFile(_ path: Foundation.URL, progress: ((Swift.Double) -> ())?) throws -> Foundation.URL
+  public class func quickZipFiles(_ paths: [Foundation.URL], fileName: Swift.String) throws -> Foundation.URL
+  public class func quickZipFiles(_ paths: [Foundation.URL], fileName: Swift.String, progress: ((Swift.Double) -> ())?) throws -> Foundation.URL
+}
+public enum ZipError : Swift.Error {
+  case fileNotFound
+  case unzipFail
+  case zipFail
+  public var description: Swift.String {
+    get
+  }
+  public static func == (a: CubiCapture.ZipError, b: CubiCapture.ZipError) -> Swift.Bool
+  public var hashValue: Swift.Int {
+    get
+  }
+  public func hash(into hasher: inout Swift.Hasher)
+}
+public enum ZipCompression : Swift.Int {
+  case NoCompression
+  case BestSpeed
+  case DefaultCompression
+  case BestCompression
+  public typealias RawValue = Swift.Int
+  public init?(rawValue: Swift.Int)
+  public var rawValue: Swift.Int {
+    get
+  }
+}
+public struct ArchiveFile {
+  public init(filename: Swift.String, data: Foundation.NSData, modifiedTime: Foundation.Date?)
+}
+public class Zip {
+  public init()
+  public class func unzipFile(_ zipFilePath: Foundation.URL, destination: Foundation.URL, overwrite: Swift.Bool, password: Swift.String?, progress: ((Swift.Double) -> ())? = nil, fileOutputHandler: ((Foundation.URL) -> Swift.Void)? = nil) throws
+  public class func zipFiles(paths: [Foundation.URL], zipFilePath: Foundation.URL, password: Swift.String?, compression: CubiCapture.ZipCompression = .DefaultCompression, progress: ((Swift.Double) -> ())?) throws
+  public class func zipData(archiveFiles: [CubiCapture.ArchiveFile], zipFilePath: Foundation.URL, password: Swift.String?, compression: CubiCapture.ZipCompression = .DefaultCompression, progress: ((Swift.Double) -> ())?) throws
+  public class func addCustomFileExtension(_ fileExtension: Swift.String)
+  public class func removeCustomFileExtension(_ fileExtension: Swift.String)
+  public class func isValidFileExtension(_ fileExtension: Swift.String) -> Swift.Bool
+  @objc deinit
+}
+public protocol CCCcaptureDelegate : AnyObject {
+  func processReadyDelegationFunc(_ controller: CubiCapture.CCCapture)
+  func dataZippedDelegationFunc(_ controller: CubiCapture.CCCapture) -> Swift.String
+  func zippedDataLocation(_ controller: CubiCapture.CCCapture, location: Foundation.URL) -> Foundation.URL
+}
+@objc public class CCCapture : ARKit.ARSCNView, ARKit.ARSCNViewDelegate, ARKit.ARSessionDelegate {
+  weak public var delegateCapture: CubiCapture.CCCcaptureDelegate?
+  public var recordButton: UIKit.UIButton
+  public var timerLabel: UIKit.UILabel
+  public var progressSpinner: UIKit.UIActivityIndicatorView
+  public var guideImage: UIKit.UIImageView
+  public func returnImageFromBundle(named: Swift.String) -> UIKit.UIImage
+  public var fileName: Swift.String
+  public var number: Swift.String
+  public var postCode: Swift.String
+  public var city: Swift.String
+  public var state: Swift.String
+  public var country: Swift.String
+  public var suite: Swift.String
+  public func setView(sceneToController: UIKit.UIViewController)
+  @objc public func session(_ session: ARKit.ARSession, didUpdate frame: ARKit.ARFrame)
+  @objc public func session(_ session: ARKit.ARSession, cameraDidChangeTrackingState camera: ARKit.ARCamera)
+  public func startCapture()
+  public func deleteTempVideos()
+  public func endCaptureSession()
+  @objc override dynamic public init(frame: CoreGraphics.CGRect, options: [Swift.String : Any]? = nil)
+  @objc override dynamic public init(frame: CoreGraphics.CGRect)
+  @objc required dynamic public init?(coder: Foundation.NSCoder)
+  @objc deinit
+}
+extension CCCapture : CubiCapture.CCCcaptureDelegate {
+  public func zippedDataLocation(_ controller: CubiCapture.CCCapture, location: Foundation.URL) -> Foundation.URL
+  public func dataZippedDelegationFunc(_ controller: CubiCapture.CCCapture) -> Swift.String
+  public func processReadyDelegationFunc(_ controller: CubiCapture.CCCapture)
+}
